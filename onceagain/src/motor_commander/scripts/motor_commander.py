@@ -231,6 +231,8 @@ class MotorInterface():
 
 # Motor init codes
 try:
+    # Set up for 8 motors should be typical set up
+    # Next thing to do is mock the motors
     local_channels: List[int] = [x for x in range(8)]
     num_motors: int = len(local_channels)
     motor_caller = MotorInterface(local_channels, num_motors, 0, 100, .1, 5)

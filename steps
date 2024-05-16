@@ -1,0 +1,3 @@
+catkin_make
+./../../motor_source
+roscd motor_command

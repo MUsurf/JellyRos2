@@ -10,3 +10,9 @@
 *DOC_NO_UP* 
 py_tests/motors/*/*.txt
 py_tests/motors/Text Files/Aden_Project.txt
+build
+catkin_ws
+files
+new
+new_test
+py_tests

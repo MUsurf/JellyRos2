@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(motor_commander)
+project(motor_commands)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -160,6 +160,7 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/motor_commander.py
+  scripts/motor_driver.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

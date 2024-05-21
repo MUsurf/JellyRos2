@@ -17,7 +17,7 @@ pca.frequency = 280  # Hz
 # END SETUP
 
 # Rospy nodes
-rospy.init_node("motor_command")
+rospy.init_node("motor_listener")
 rate = rospy.Rate(100)
 
 
@@ -220,7 +220,7 @@ class MotorInterface():
         """Function to subscribe to driver with ros"""
 
         print("Data received is: " + str(message_rec.data))
-        self.direction_to_motor(message_rec.data)
+        self.calling_function(message_rec.data)
         # for index in range(len(message_rec)):
         #     x = self.__microSec_to_duty(
         #         message_rec[index])
@@ -237,16 +237,17 @@ try:
     num_motors: int = len(local_channels)
     motor_caller = MotorInterface(local_channels, num_motors, 0, 100, .1, 5)
 
-    high: List[int] = [20 for i in range(num_motors)]
-    low: List[int] = [30 for i in range(num_motors)]
+    # high: List[int] = [20 for i in range(num_motors)]
+    # low: List[int] = [30 for i in range(num_motors)]
 
     print("arming")
     motor_caller.arm_seq()
     print("done arming")
     while not rospy.is_shutdown():
-        rospy.Subscriber("/command", Int32MultiArray, motor_caller.callback)
+        rospy.Subscriber("motor_command", Int32MultiArray, motor_caller.callback)
         # rospy.Subscriber("volt_low", Bool, loop.cut_motors)
         rospy.spin()
+    motor_caller.clo_seq()
 
 except KeyboardInterrupt:
     motor_caller.clo_seq()

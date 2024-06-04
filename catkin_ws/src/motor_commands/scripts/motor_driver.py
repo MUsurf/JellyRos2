@@ -143,6 +143,11 @@ class MotorCommand():
 
 
 class MotorInterface():
+    """Handles direct control of motors
+    
+        Should be given an array of ints 
+    """
+
     def __init__(self, channels: List[int], numMotors: int, offset: int, max_val: int, minor_time: float, step_size: int, steps_used=10) -> None:
         # info Number of motors
         self.numMotors: int = numMotors

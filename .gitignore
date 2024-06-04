@@ -15,12 +15,12 @@ files
 # ros files to always be ignored
 .catkin_workspace
 
-#catkin workspaces to keep
+# Catkin workspaces to keep
 py_tests
 
-#built files to keep local
+# Built files to keep local
 devel/
 build/
 
-#local Files
+# Local Files
 catkin_ws_1213

@@ -2,7 +2,7 @@
  * Author: Dheera Venkatraman <dheera@dheera.net>
  */
 
-#include "imu_bno055/bno055_i2c_driver.h"
+#include "imu/bno055_i2c_driver.h"
 
 namespace imu_bno055 {
 

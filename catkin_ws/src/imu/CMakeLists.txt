@@ -102,7 +102,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
+ INCLUDE_DIRS include
 #  LIBRARIES imu
 #  CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
@@ -124,8 +124,8 @@ include_directories(
 #   src/${PROJECT_NAME}/imu.cpp
 # )
 
-add_executable(imu src/bno055_i2c_node.cpp)
-target_link_libraries(imu ${catkin_LIBRARIES})
+add_executable(bno055_i2c_node src/bno055_i2c_driver.cpp src/bno055_i2c_node.cpp src/watchdog.cpp)
+target_link_libraries(bno055_i2c_node ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -193,6 +193,12 @@ target_link_libraries(imu ${catkin_LIBRARIES})
 #   # myfile2
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
+
+install(TARGETS bno055_i2c_node
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 #############
 ## Testing ##

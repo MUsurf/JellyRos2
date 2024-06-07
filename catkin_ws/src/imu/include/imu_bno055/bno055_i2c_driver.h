@@ -189,7 +189,7 @@
 #define DIAG_SYS_STAT 4
 #define DIAG_SYS_ERR 5
 
-namespace imu {
+namespace imu_bno055 {
 
 // order of this struct is designed to match the I2C registers
 // so all data can be read in one fell swoop

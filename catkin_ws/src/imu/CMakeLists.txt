@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.0.2)
-project(imu)
+cmake_minimum_required(VERSION 2.8.3)
+project(imu_bno055)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -104,7 +104,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
  INCLUDE_DIRS include
 #  LIBRARIES imu
-#  CATKIN_DEPENDS roscpp std_msgs
+ CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
 )
 
@@ -115,7 +115,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -124,8 +124,14 @@ include_directories(
 #   src/${PROJECT_NAME}/imu.cpp
 # )
 
-add_executable(bno055_i2c_node src/bno055_i2c_driver.cpp src/bno055_i2c_node.cpp src/watchdog.cpp)
+add_executable(watchdog_node src/watchdog.cpp)
+target_link_libraries(watchdog_node ${catkin_LIBRARIES})
+
+add_executable(bno055_i2c_node src/bno055_i2c_node.cpp)
 target_link_libraries(bno055_i2c_node ${catkin_LIBRARIES})
+
+add_executable(bno055_i2c_driver src/bno055_i2c_driver.cpp)
+target_link_libraries(bno055_i2c_driver ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

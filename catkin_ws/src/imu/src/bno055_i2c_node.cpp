@@ -6,7 +6,7 @@
  * working.
  */
 
-#include <imu_bno055/bno055_i2c_driver.h>
+#include "imu_bno055/bno055_i2c_driver.h"
 #include "watchdog/watchdog.h"
 #include <csignal>
 

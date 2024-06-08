@@ -124,14 +124,8 @@ include_directories(
 #   src/${PROJECT_NAME}/imu.cpp
 # )
 
-add_executable(watchdog_node src/watchdog.cpp)
-target_link_libraries(watchdog_node ${catkin_LIBRARIES})
-
-add_executable(bno055_i2c_node src/bno055_i2c_node.cpp)
+add_executable(bno055_i2c_node src/bno055_i2c_driver.cpp src/bno055_i2c_node.cpp src/watchdog.cpp)
 target_link_libraries(bno055_i2c_node ${catkin_LIBRARIES})
-
-add_executable(bno055_i2c_driver src/bno055_i2c_driver.cpp)
-target_link_libraries(bno055_i2c_driver ${catkin_LIBRARIES})
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries

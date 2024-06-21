@@ -1,0 +1,3 @@
+<launch>
+    <node name="depth_node" pkg="process_depth" type="depthNode.py"/>
+</launch>

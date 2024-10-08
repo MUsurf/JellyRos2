@@ -39,6 +39,7 @@ high: List[int] = [20 for i in range(num_motors)]
 low: List[int] = [30 for i in range(num_motors)]
 list_thing = high
 
+motor_powers = [0 for i in range(num_motors)]
 
 hl_counter = 0
 
@@ -58,8 +59,13 @@ def commander():
         # hello_str = "hello world %s" % rospy.get_time()
         rospy.loginfo(list_thing)
         pub.publish(data=list_thing)
+
         rate.sleep()
 
+        pub.publish(data=motor_powers)
+        print('x')
+
+        rate.sleep()
 if __name__ == '__main__':
     try:
         commander()

@@ -99,6 +99,7 @@ def commander():
         for i in range(4):
             motors[i+4] = 0
         print(motors)
+        
     jelly_turn("left", 20, 3)
     jelly_go("forwards", 10, 5)
 

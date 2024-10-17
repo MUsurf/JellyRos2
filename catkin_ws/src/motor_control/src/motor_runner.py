@@ -35,12 +35,6 @@ from typing import List
 
 num_motors = 8
 
-'''
-high: List[int] = [20 for i in range(num_motors)]
-low: List[int] = [30 for i in range(num_motors)]
-list_thing = high
-'''
-
 motor_powers = [0 for i in range(num_motors)]
 
 hl_counter = 0
@@ -50,9 +44,14 @@ def commander():
     pub = rospy.Publisher('motor_command', Int32MultiArray, queue_size=10)
     rospy.init_node('motor_commander', anonymous=True)
     rate = rospy.Rate(.4) # 40hz
-
-
-
+    '''  
+    #! This is just a section to show the motors running when there is seperate input from ros this should not be used
+    while not rospy.is_shutdown():
+        if (hl_counter == 0):
+            list_thing = high
+        else:
+            list_thing = low
+        hl_counter = (hl_counter + 1) % 2
         # hello_str = "hello world %s" % rospy.get_time()
         rospy.loginfo(list_thing)
         pub.publish(data=list_thing)
@@ -63,43 +62,47 @@ def commander():
         print('x')
 
         rate.sleep()
+    '''
+
+    motors = [0 for _ in range (8)]
+
+    def jelly_turn(direction: str, speed: float, seconds: float):
+        if (direction == "right"):
+            speed *= -1
+        elif (direction != "left"):
+            print("invalid turn direction, try 'right' or 'left'")
+            return
+
+        motors[4] = speed * -1
+        motors[7] = speed * -1
+        motors[5] = speed * 1
+        motors[6] = speed * 1
+
+        print (motors)
+        time.sleep(seconds)
+        #stopping the turn
+        for i in range(4):
+            motors[i+4] = 0
+        print(motors)
+        # example: jelly_turn("left", 20, 3)
+
+    def jelly_go(direction: str, speed: float, seconds: float):
+        if (direction == "forwards"): 
+            speed *= -1
+        motors[4] = speed * -1
+        motors[7] = speed * -1
+        motors[5] = speed * 1
+        motors[6] = speed * 1
+        print(motors)
+        time.sleep(seconds)
+
+        for i in range(4):
+            motors[i+4] = 0
+        print(motors)
+    jelly_turn("left", 20, 3)
+    jelly_go("forwards", 10, 5)
 
 
-motors = [0 for _ in range (8)]
-
-def jelly_turn(direction: str, speed: float, seconds: float):
-    if (direction == "right"):
-        speed *= -1
-    elif (direction != "left"):
-        print("invalid turn direction, try 'right' or 'left'")
-        return
-
-    motors[4] = speed * -1
-    motors[7] = speed * -1
-    motors[5] = speed * 1
-    motors[6] = speed * 1
-
-    print (motors)
-    time.sleep(seconds)
-    #stopping the turn
-    for i in range(4):
-        motors[i+4] = 0
-    print(motors)
-    # example: jelly_turn("left", 20, 3)
-
-def jelly_go(direction: str, speed: float, seconds: float):
-    if (direction == "forwards"): 
-        speed *= -1
-    motors[4] = speed * -1
-    motors[7] = speed * -1
-    motors[5] = speed * 1
-    motors[6] = speed * 1
-    print(motors)
-    time.sleep(seconds)
-
-    for i in range(4):
-        motors[i+4] = 0
-    print(motors)
 
 
 # pub = rospy.Publisher('motor_command', Int32MultiArray, queue_size=10)

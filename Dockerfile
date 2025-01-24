@@ -48,3 +48,4 @@ RUN /bin/bash -c 'source /opt/ros/noetic/setup.bash && \
 CMD ["bash"]
 
 #test comment
+#test comment 2

@@ -82,14 +82,41 @@ class MotorCommand():
         
         return powers
     
-    def vertical_power(self, #NAME THIS BETTER :(
+    def zstuff(self, #THIS BETTER :) - signed Kaden and Charles
         z : float,
         roll : float,
         pitch : float):
         """Put documentation here"""
 
+        #like reading, 5, 6, 7, 8 (aka 5 is top left and 8 is bottom right)
         powers = [0,0,0,0]
         
+        powers = [z, z, z, z]
+
+        #counterclockwise is positive
+        if roll > 0:
+            powers[1] += roll
+            powers[3] += roll
+            powers[0] -= roll
+            powers[2] -= roll
+        elif roll < 0:
+            powers[0] -= roll
+            powers[2] -= roll
+            powers[1] += roll
+            powers[3] += roll
+
+        if pitch > 0:
+            powers[0] += pitch
+            powers[1] += pitch
+            powers[2] -= pitch
+            powers[3] -= pitch
+        elif pitch < 0:
+            powers[2] -= pitch
+            powers[3] -= pitch
+            powers[0] += pitch
+            powers[1] += pitch
+
+
         #Code here
         
         return powers

@@ -126,8 +126,9 @@ class MotorCommand():
             if abs(powers[i]) > maxPower:
                 maxPower = abs(powers[i])
         
-        for i in powers:
-            powers[i] = (powers[i]/maxPower)*100
+        if maxPower > 100:
+            for i in powers:
+                powers[i] = (powers[i]/maxPower)*100
 
         #Code here
         

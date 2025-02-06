@@ -82,7 +82,7 @@ class MotorCommand():
         
         return powers
     
-    def zstuff(self, #THIS BETTER :) - signed Kaden and Charles
+    def veritcal_power(self, 
         z : float,
         roll : float,
         pitch : float):
@@ -116,6 +116,18 @@ class MotorCommand():
             powers[0] += pitch
             powers[1] += pitch
 
+        #increases negative powers by 25% before averaging
+        for i in powers:
+            if i < 0:
+                i *= 1.25
+        
+        maxPower = powers[0]
+        for i in range(len(powers)-1):
+            if abs(powers[i]) > maxPower:
+                maxPower = abs(powers[i])
+        
+        for i in powers:
+            powers[i] = (powers[i]/maxPower)*100
 
         #Code here
         

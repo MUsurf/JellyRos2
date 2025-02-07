@@ -79,6 +79,11 @@ class MotorCommand():
         powers = [x,x,x,x]
         #Code here
         
+        powers[0] = -y+yaw
+        powers[1] = y-yaw
+        powers[2] = -y-yaw
+        powers[3] = y+yaw
+
         max = 0
         
         for i in powers:

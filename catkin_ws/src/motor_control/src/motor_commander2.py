@@ -70,30 +70,20 @@ class MotorCommand():
             """
             self.motors[i].duty_cycle = int(65535 * abs(powers[i]) / 100) 
         
-    def horizontal_powers(self, #NAME THIS BETTER :(
+    def horizontal_power(self, #NAME THIS BETTER :(
         x : float,
         y : float,
         yaw : float):
         """Put documentation here"""
 
-        powers = [x,x,x,x]
+        #Motors 1,2,3,4
+        powers = [0,0,0,0]
+        
         #Code here
-        
-        max = 0
-        
-        for i in powers:
-            if (abs(powers[i])>max):
-                max = abs(powers[i])
-
-        if(max>100):
-            for j in powers:
-                powers[j] = (powers[j]/max) * 100
-       
-
         
         return powers
     
-    def veritcal_power(self, 
+    def zstuff(self, #THIS BETTER :) - signed Kaden and Charles
         z : float,
         roll : float,
         pitch : float):
@@ -127,19 +117,6 @@ class MotorCommand():
             powers[0] += pitch
             powers[1] += pitch
 
-        #increases negative powers by 25% before averaging
-        for i in powers:
-            if i < 0:
-                i *= 1.25
-        
-        maxPower = powers[0]
-        for i in range(len(powers)-1):
-            if abs(powers[i]) > maxPower:
-                maxPower = abs(powers[i])
-        
-        if maxPower > 100:
-            for i in powers:
-                powers[i] = (powers[i]/maxPower)*100
 
         #Code here
         

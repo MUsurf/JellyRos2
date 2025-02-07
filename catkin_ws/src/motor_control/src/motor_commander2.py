@@ -81,6 +81,23 @@ class MotorCommand():
         
         #Code here
         
+        powers[0] += -y+yaw
+        powers[1] += y-yaw
+        powers[2] += -y-yaw
+        powers[3] += y+yaw
+
+        max = 0
+        
+        for i in powers:
+            if (abs(powers[i])>max):
+                max = abs(powers[i])
+
+        if(max>100):
+            for j in powers:
+                powers[j] = (powers[j]/max) * 100
+       
+
+        
         return powers
     
     def zstuff(self, #THIS BETTER :) - signed Kaden and Charles
@@ -95,28 +112,30 @@ class MotorCommand():
         powers = [z, z, z, z]
 
         #counterclockwise is positive
-        if roll > 0:
-            powers[1] += roll
-            powers[3] += roll
-            powers[0] -= roll
-            powers[2] -= roll
-        elif roll < 0:
-            powers[0] -= roll
-            powers[2] -= roll
-            powers[1] += roll
-            powers[3] += roll
+       
+        powers[0] -= roll
+        powers[1] += roll
+        powers[2] -= roll
+        powers[3] += roll
 
-        if pitch > 0:
-            powers[0] += pitch
-            powers[1] += pitch
-            powers[2] -= pitch
-            powers[3] -= pitch
-        elif pitch < 0:
-            powers[2] -= pitch
-            powers[3] -= pitch
-            powers[0] += pitch
-            powers[1] += pitch
+        powers[0] += pitch
+        powers[1] += pitch
+        powers[2] -= pitch
+        powers[3] -= pitch
 
+        #increases negative powers by 25% before averaging
+        for i in powers:
+            if i < 0:
+                i *= 1.25
+        
+        maxPower = powers[0]
+        for i in range(len(powers)-1):
+            if abs(powers[i]) > maxPower:
+                maxPower = abs(powers[i])
+        
+        if maxPower > 100:
+            for i in powers:
+                powers[i] = (powers[i]/maxPower)*100
 
         #Code here
         

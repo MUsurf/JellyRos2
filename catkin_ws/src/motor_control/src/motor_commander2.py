@@ -105,27 +105,16 @@ class MotorCommand():
         powers = [z, z, z, z]
 
         #counterclockwise is positive
-        if roll > 0:
-            powers[1] += roll
-            powers[3] += roll
-            powers[0] -= roll
-            powers[2] -= roll
-        elif roll < 0:
-            powers[0] -= roll
-            powers[2] -= roll
-            powers[1] += roll
-            powers[3] += roll
+       
+        powers[0] -= roll
+        powers[1] += roll
+        powers[2] -= roll
+        powers[3] += roll
 
-        if pitch > 0:
-            powers[0] += pitch
-            powers[1] += pitch
-            powers[2] -= pitch
-            powers[3] -= pitch
-        elif pitch < 0:
-            powers[2] -= pitch
-            powers[3] -= pitch
-            powers[0] += pitch
-            powers[1] += pitch
+        powers[0] += pitch
+        powers[1] += pitch
+        powers[2] -= pitch
+        powers[3] -= pitch
 
         #increases negative powers by 25% before averaging
         for i in powers:

@@ -70,15 +70,26 @@ class MotorCommand():
             """
             self.motors[i].duty_cycle = int(65535 * abs(powers[i]) / 100) 
         
-    def horizontal_power(self, #NAME THIS BETTER :(
+    def horizontal_powers(self, #NAME THIS BETTER :(
         x : float,
         y : float,
         yaw : float):
         """Put documentation here"""
 
-        powers = [0,0,0,0]
-        
+        powers = [x,x,x,x]
         #Code here
+        
+        max = 0
+        
+        for i in powers:
+            if (abs(powers[i])>max):
+                max = abs(powers[i])
+
+        if(max>100):
+            for j in powers:
+                powers[j] = (powers[j]/max) * 100
+       
+
         
         return powers
     

@@ -70,28 +70,31 @@ class MotorCommand():
             """
             self.motors[i].duty_cycle = int(65535 * abs(powers[i]) / 100) 
         
-    def horizontal_power(self, #NAME THIS BETTER :(
+    def horizontal_powers(self, #NAME THIS BETTER :(
         x : float,
         y : float,
         yaw : float):
         """Put documentation here"""
 
         #Motors 1,2,3,4
+        #Declare each motor power as x to start, since it will always be positive
+
         powers = [0,0,0,0]
         
         #Code here
-        
-        powers[0] += -y+yaw
-        powers[1] += y-yaw
-        powers[2] += -y-yaw
-        powers[3] += y+yaw
+        #For each motor add or subtract the y and yaw values. may go over the maximum of 100
+        powers[0] += -y+yaw #motor One, Y is negative, Yaw is positive
+        powers[1] += y-yaw  #motor Two, Y is Positive, Yaw is negative
+        powers[2] += -y-yaw #motor Three, Y is negative, Yaw is negative
+        powers[3] += y+yaw  #motor Four, Y is Positive, Yaw is positive
 
         max = 0
-        
+        #The following block checks to make sure none of the values overextend past 100
         for i in powers:
             if (abs(powers[i])>max):
                 max = abs(powers[i])
 
+        #If they do, scale them down to 100 
         if(max>100):
             for j in powers:
                 powers[j] = (powers[j]/max) * 100

@@ -124,3 +124,10 @@ class MotorInterface():
         print("Data received is: " + str(message_rec.data))
         self.last_directions = message_rec.data
         self.calling_function(self.last_directions)
+        
+        
+def test(setpoint):
+    time_elapsed = time.time() - last_time
+    unit_per_second = 10
+    
+    power += time_elapsed * unit_per_second

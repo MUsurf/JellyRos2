@@ -17,6 +17,7 @@ i2c = busio.I2C(SCL, SDA)
 # END SETUP
 
 class MotorCommand():
+    """Put class documentation here"""
     def __init__(self,
         local_channels : List[int]) -> None:
         """Put documentation here"""

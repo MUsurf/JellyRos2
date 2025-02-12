@@ -53,7 +53,16 @@ class MotorCommand():
             self.motors[self.motor_idex].duty_cycle = self.pwm_value
         
     def power_stepping(self):
-        pass
+        for i in range(8):
+            if self.goal_power[i] < 0:
+                    if self.current_power[i] > (self.goal_power[i]):
+                        self.current_power[i] -= self.step_value
+
+            if self.goal_power[i] > 0:
+                if self.current_power[i] < (self.goal_power[i]):
+                    self.current_power[i] += self.step_value
+            else:
+                pass
     
     def motor_loop(self):
         while True:

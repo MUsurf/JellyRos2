@@ -44,11 +44,13 @@ class MotorCommand():
         self.motor_thread.start()
     
     def set_motor_pwm(self, powers : list):
-        
+        #0 (0) to 65535 (100)
         #this is how duty cycle is set: self.motors[motor_idex].duty_cycle = pwm_value
         #pwm_value is a 16 bit int (0 is -100, max is 100)
         
-        
+        for i in range(len(powers)):
+            self.pwm_value = ((self.motors[self.motor_idex] + 100) / 200) * 65535
+            self.motors[self.motor_idex].duty_cycle = self.pwm_value
         
     def power_stepping(self):
         pass

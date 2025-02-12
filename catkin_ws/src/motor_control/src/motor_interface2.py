@@ -6,7 +6,7 @@ from typing import List
 #MAX_NEGATIVE?
 
 class motor_interface():
-    def __init__():
+    def __init__(self):
         #STUFF?
         x = 1 
 

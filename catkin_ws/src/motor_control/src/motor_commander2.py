@@ -7,6 +7,8 @@ from typing import List
 import busio
 from board import SCL, SDA
 import adafruit_pca9685 as PCA9685
+from threading import Thread
+import time
 # End imports
 
 # BEGIN SETUP
@@ -28,120 +30,35 @@ class MotorCommand():
         
         self.num_motors = len(local_channels)
         
+        self.current_power = [0 for i in range(8)]
+        self.goal_power = [0 for i in range(8)]
+        self.step_value = 1
         self.motor_duty_cycles = [0 for i in range(self.num_motors)]
         
         self.motors: List[PCA9685.PWMChannel] = [
             self.pca.channels[channel] for channel in local_channels]
         
-    def axis_to_mp(self, #Name this better :(
-        x : float,
-        y : float,
-        z : float,
-        roll: float,
-        pitch: float,
-        yaw : float):
-        """Put documentation here"""
-        
-        #The first 4 motor powers scaled -100 to 100
-        h_powers = self.horizontal_power(x, y, yaw)
-        
-        #The second 4 motor powers scaled -100 to 100
-        v_powers = self.vertical_power(z, roll, pitch)
-        
-        #Combine both groups of motors
-        self.motor_duty_cycles = h_powers + v_powers
-        
-        #Sets motor powers
-        self.set_motor_powers(self.motor_duty_cycles)
-                    
-    def set_motor_powers(self, powers : list = None):
-        """Put documentation here"""
-        
-        #Sets the duty cycles to the last recorded duty cycle if nothing is provided
-        #Prob not necessary but what do I know
-        if(powers == None):
-            powers = self.motor_duty_cycles
-        
-        for i in range(self.num_motors):
-            """
-            65535 is the 16 bit max.
-            The duty cycle ranges from 0-65535 as 0-100
-            NOTE: This no work right now as negative numbers are not accounted for.
-            Eventaully, 0 will be -100 and 65535 will be 100
-            """
-            self.motors[i].duty_cycle = int(65535 * abs(powers[i]) / 100) 
-        
-    def horizontal_powers(self, #NAME THIS BETTER :(
-        x : float,
-        y : float,
-        yaw : float):
-        """Put documentation here"""
-
-        #Motors 1,2,3,4
-        #Declare each motor power as x to start, since it will always be positive
-
-        powers = [0,0,0,0]
-        
-        #Code here
-        #For each motor add or subtract the y and yaw values. may go over the maximum of 100
-        powers[0] += -y+yaw #motor One, Y is negative, Yaw is positive
-        powers[1] += y-yaw  #motor Two, Y is Positive, Yaw is negative
-        powers[2] += -y-yaw #motor Three, Y is negative, Yaw is negative
-        powers[3] += y+yaw  #motor Four, Y is Positive, Yaw is positive
-
-        max = 0
-        #The following block checks to make sure none of the values overextend past 100
-        for i in powers:
-            if (abs(powers[i])>max):
-                max = abs(powers[i])
-
-        #If they do, scale them down to 100 
-        if(max>100):
-            for j in powers:
-                powers[j] = (powers[j]/max) * 100
-       
-
-        
-        return powers
+        self.motor_flag : bool = True
+        self.motor_update_frequency = 50
+        self.motor_thread : Thread = Thread(self.motor_loop)
+        self.motor_thread.start()
     
-    def zstuff(self, #THIS BETTER :) - signed Kaden and Charles
-        z : float,
-        roll : float,
-        pitch : float):
-        """Put documentation here"""
-
-        #like reading, 5, 6, 7, 8 (aka 5 is top left and 8 is bottom right)
-        powers = [0,0,0,0]
+    def set_motor_pwm(self, powers : list):
         
-        powers = [z, z, z, z]
-
-        #counterclockwise is positive
-       
-        powers[0] -= roll
-        powers[1] += roll
-        powers[2] -= roll
-        powers[3] += roll
-
-        powers[0] += pitch
-        powers[1] += pitch
-        powers[2] -= pitch
-        powers[3] -= pitch
-
-        #increases negative powers by 25% before averaging
-        for i in powers:
-            if i < 0:
-                i *= 1.25
+        #this is how duty cycle is set: self.motors[motor_idex].duty_cycle = pwm_value
+        #pwm_value is a 16 bit int (0 is -100, max is 100)
         
-        maxPower = powers[0]
-        for i in range(len(powers)-1):
-            if abs(powers[i]) > maxPower:
-                maxPower = abs(powers[i])
         
-        if maxPower > 100:
-            for i in powers:
-                powers[i] = (powers[i]/maxPower)*100
-
-        #Code here
         
-        return powers
+    def power_stepping(self):
+        pass
     
+    def motor_loop(self):
+        while True:
+            start_time = time.time()
+            if(self.motor_flag):
+                self.power_stepping()
+                self.set_motor_pwm(self.current_power)
+            if(time.time() - start_time < 1 / self.motor_update_frequency):
+                time.sleep(1 / self.motor_update_frequency - (time.time() - start_time))
+        

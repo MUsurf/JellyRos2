@@ -20,7 +20,7 @@ class motor_interface():
         powers_yaw = [yaw, -yaw, -yaw, yaw]
         
         #Sum powers into single list
-        for i in range(len(powers) - 1):
+        for i in range(len(powers)):
             powers[i] = powers_x[i] + powers_y[i] + powers_yaw[i]
             
         return powers
@@ -54,11 +54,8 @@ class motor_interface():
             powers[i+3] = powers_vert[i]
             
         # Sum powers into single list
-        for i in range(len(powers) - 1):
+        for i in range(len(powers)):
             if (powers[i] > 0):
                 powers[i] = self.power_scale(powers[i]) # Negative power output is less than positive; compensate by lowering pos.
         
         return powers
-
-        
-    

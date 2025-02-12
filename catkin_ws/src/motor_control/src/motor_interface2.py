@@ -38,8 +38,6 @@ class motor_interface():
     
     
     def hortical_pow(self, x : float, y : float, yaw : float, roll: float, pitch: float, z: float) -> list:
-        powers_vert = [0, 0, 0, 0]
-        powers_horz = [0, 0, 0, 0]
         powers = [0, 0, 0, 0, 0, 0, 0, 0]
         
         powers_vert = self.vert_power(roll, pitch, z)

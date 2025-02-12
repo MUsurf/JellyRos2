@@ -46,17 +46,17 @@ class motor_interface():
         powers_horz = self.horz_power(x, y, z)
         
         # Assign first 4 motor powers (horizontal)
-        for i in range(3):
+        for i in range(4):
             powers[i] = powers_horz[i]
             
         # Assign second 4 motors (vertical)
-        for i in range(3):
+        for i in range(4):
             powers[i+3] = powers_vert[i]
             
         # Sum powers into single list
         for i in range(len(powers) - 1):
             if (powers[i] > 0):
-                powers[i] = self.pos_to_neg_pow(powers[i]) # Negative power output is less than positive; compensate by lowering pos.
+                powers[i] = self.power_scale(powers[i]) # Negative power output is less than positive; compensate by lowering pos.
         
         return powers
 

@@ -33,43 +33,46 @@ class MotorCommand():
         self.current_power = [0 for i in range(8)]
         self.goal_power = [0 for i in range(8)]
         self.step_value = 1
-        self.motor_duty_cycles = [0 for i in range(self.num_motors)]
         
         self.motors: List[PCA9685.PWMChannel] = [
             self.pca.channels[channel] for channel in local_channels]
         
         self.motor_flag : bool = True
-        self.motor_update_frequency = 50
+        self.motor_update_frequency = 50 # hz
         self.motor_thread : Thread = Thread(self.motor_loop)
+        
+        #Should it be started here?
         self.motor_thread.start()
     
     def set_motor_pwm(self, powers : list):
-        #0 (0) to 65535 (100)
-        #this is how duty cycle is set: self.motors[motor_idex].duty_cycle = pwm_value
-        #pwm_value is a 16 bit int (0 is -100, max is 100)
+        #0 (-100) to 65535 (100)
+        # #pwm_value is a 16 bit int (0 is -100, max is 100)
         
         for i in range(len(powers)):
-            self.pwm_value = ((self.motors[self.motor_idex] + 100) / 200) * 65535
-            self.motors[self.motor_idex].duty_cycle = self.pwm_value
+            duty_cycle = ((self.current_power[i] + 100) / 200.0) * 65535
+            self.motors[i].duty_cycle = duty_cycle
         
     def power_stepping(self):
-        for i in range(8):
-            if self.goal_power[i] < 0:
-                    if self.current_power[i] > (self.goal_power[i]):
-                        self.current_power[i] -= self.step_value
-
-            if self.goal_power[i] > 0:
-                if self.current_power[i] < (self.goal_power[i]):
-                    self.current_power[i] += self.step_value
-            else:
-                pass
+        for i in range(len(self.current_power)):
+            distance = self.goal_power[i] - self.current_power[i]
+            if not distance == 0:
+                if(abs(distance) <= self.step_value):
+                    self.current_power[i] = self.goal_power[i]
+                else:
+                    self.current_power[i] += (distance / abs(distance)) * self.step_value
     
     def motor_loop(self):
         while True:
             start_time = time.time()
             if(self.motor_flag):
-                self.power_stepping()
-                self.set_motor_pwm(self.current_power)
+                try:
+                    self.power_stepping()
+                    self.set_motor_pwm(self.current_power)
+                except:
+                    # Not really sure how this should be handled. Exceptions wouldn't really propagate up.
+                    # Maybe set @self.motor_flag to false? Although that doesn't really help
+                    # Definitely want a way for it to be reported. Shouldn't kill the thread though
+                    pass
             if(time.time() - start_time < 1 / self.motor_update_frequency):
                 time.sleep(1 / self.motor_update_frequency - (time.time() - start_time))
         

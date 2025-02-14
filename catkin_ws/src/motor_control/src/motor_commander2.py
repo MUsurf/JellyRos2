@@ -21,11 +21,12 @@ i2c = busio.I2C(SCL, SDA)
 class MotorCommand():
     """Put class documentation here"""
     def __init__(self,
-        local_channels : List[int]) -> None:
+        local_channels : List[int],
+        pca_address : int = 0x40) -> None:
         """Put documentation here"""
         
         #PCA definition
-        self.pca = PCA9685.PCA9685(i2c, address=0x40) #0x40 is the I2C address of the PCA
+        self.pca = PCA9685.PCA9685(i2c, address=pca_address) #0x40 is the I2C address of the PCA
         self.pca.frequency = 280 # Hz
         
         self.num_motors = len(local_channels)

@@ -51,11 +51,6 @@ class motor_interface():
             x + y + yaw
         ]
         
-        for i in range(len(powers)):
-            if (powers[i] > 100):
-                for j in range(len(powers)):
-                    powers[j] / powers[i]
-            
         return powers
     
     def vertical_power(self, roll: float, pitch: float, z: float) -> list:
@@ -68,11 +63,6 @@ class motor_interface():
             z - roll - pitch,
             z + roll - pitch
         ]
-        
-        for i in range(len(powers)):
-            if (powers[i] > 100):
-                for j in range(len(powers)):
-                    powers[j] / powers[i]
 
         return powers
     
@@ -81,7 +71,10 @@ class motor_interface():
         
         powers = self.vert_power(roll, pitch, z) + self.horz_power(x, y, yaw)
         
-        # ! INSERT POWER SCALING TO ANYTHING OVER 100 HERE
+        for i in range(len(powers)):
+            if (powers[i] > 100):
+                for j in range(len(powers)):
+                    powers[j] / powers[i]
             
         # Sum powers into single list
         for i in range(len(powers)):

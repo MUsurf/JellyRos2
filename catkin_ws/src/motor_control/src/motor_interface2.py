@@ -2,20 +2,19 @@
 from typing import List
 from motor_commander2 import MotorCommand
 import time
-import scipy
 # End typing imports
 
-#MAX_POSITIVE?
-#MAX_NEGATIVE?
-
 class motor_interface():
+    """Handles direct control of motors"""
+    
     def __init__(self):
-        #Motor definition
-        self.channels = [0,1,2,3,4,5,6,7] # ?
+        #info Channel for each of 8 motors
+        self.channels = [0,1,2,3,4,5,6,7]
+        #info Make the motor commander
         self.motor_commander = MotorCommand(self.channels)
         
     def set_motor_powers(self, x : float, y : float, z : float, roll : float, pitch : float, yaw : float):
-        """Sets the motor powers. Uses get_powers to convert to pwm percentages."""
+        """Sets the motor powers. Uses get_powers to convert to PWM percentages."""
         powers = self.get_powers(x,y,z,roll,pitch,yaw)
         self.motor_commander.set_motor_pwm(powers)
         
@@ -42,8 +41,8 @@ class motor_interface():
         self.set_motor_powers_individual([0 for _ in range(self.motor_commander.num_motors)])
         
     def horzitonal_power(self, x : float, y : float, yaw : float) -> list:
-        """Function to convert inputs for desired x, y, yaw into powers for motors 1, 2, 3, 4"""
-        # Motors 1, 2, 3, 4 (CCW starting from top right motors as seen from above)
+        """Function to convert inputs for desired x, y, yaw into powers for motors 1, 2, 3, 4
+            Motors 1, 2, 3, 4 (CCW starting from top right motors as seen from above)"""
         powers = [
             x - y + yaw,
             x + y - yaw,

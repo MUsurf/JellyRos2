@@ -41,7 +41,7 @@ class motor_interface():
         
         self.set_motor_powers_individual([0 for _ in range(self.motor_commander.num_motors)])
         
-    def horz_power(self, x : float, y : float, yaw : float) -> list:
+    def horzitonal_power(self, x : float, y : float, yaw : float) -> list:
         """Function to convert inputs for desired x, y, yaw into powers for motors 1, 2, 3, 4"""
         # Motors 1, 2, 3, 4 (CCW starting from top right motors as seen from above)
         powers = [
@@ -50,10 +50,15 @@ class motor_interface():
             x - y - yaw,
             x + y + yaw
         ]
+        
+        for i in range(len(powers)):
+            if (powers[i] > 100):
+                for j in range(len(powers)):
+                    powers[j] / powers[i]
             
         return powers
     
-    def vert_power(self, roll: float, pitch: float, z: float) -> list:
+    def vertical_power(self, roll: float, pitch: float, z: float) -> list:
         """Function to convert inputs for desired roll, pitch, z into powers for motors 5 6 7 8"""
         
         #list is read [top right, top left, bottom left, bottom right]
@@ -63,6 +68,11 @@ class motor_interface():
             z - roll - pitch,
             z + roll - pitch
         ]
+        
+        for i in range(len(powers)):
+            if (powers[i] > 100):
+                for j in range(len(powers)):
+                    powers[j] / powers[i]
 
         return powers
     

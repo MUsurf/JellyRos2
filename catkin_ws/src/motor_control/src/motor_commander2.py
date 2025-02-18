@@ -54,6 +54,7 @@ class MotorCommand():
             self.motors[i].duty_cycle = duty_cycle
         
     def power_stepping(self):
+        """Ensures a motor's power increases in steps instead of trying to blast full power."""
         for i in range(len(self.current_power)):
             distance = self.goal_power[i] - self.current_power[i]
             if not distance == 0:

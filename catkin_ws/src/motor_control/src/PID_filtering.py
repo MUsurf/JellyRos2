@@ -1,35 +1,56 @@
+import PID_controller
 class PID_filtering:
     def __init__(self,
-                    setpointX : float, measurementX : float,
-                    setpointY : float, measurementY : float,
-                    setpointZ : float, measurementZ : float,
-                    setpointRoll : float, measurementRoll : float,
-                    setpointPitch : float, measurementPitch : float,
-                    setpointYaw : float, measurementYaw : float,
-                    X_power : float = None, Y_power : float = None, Z_power : float = None,
-                    Roll_power : float = None, Pitch_power : float = None, Yaw_power : float = None
-                    ):
+                setpointX : float, measurementX : float,
+                setpointY : float, measurementY : float,
+                setpointZ : float, measurementZ : float,
+                setpointRoll : float, measurementRoll : float,
+                setpointPitch : float, measurementPitch : float,
+                setpointYaw : float, measurementYaw : float,
+                X_power : float = None, Y_power : float = None, Z_power : float = None,
+                Roll_power : float = None, Pitch_power : float = None, Yaw_power : float = None
+                ):
             if (X_power != None):
-                self.X_power = X_power
+                X_power = X_power
             else:
-                self.X_power = calculate(setpointX, measurementX)
+                X_power = calculate(setpointX, measurementX)
             if (Y_power != None):
-                self.Y_power = Y_power
+                Y_power = Y_power
             else:
-                self.Y_power = calculate(setpointY, measurementY)
+                Y_power = calculate(setpointY, measurementY)
             if (Z_power != None):
-                self.Z_power = Z_power
+                Z_power = Z_power
             else:
-                self.Z_power = calculate(setpointZ, measurementZ)
+                Z_power = calculate(setpointZ, measurementZ)
             if (Roll_power != None):
-                self.Roll_power = Roll_power
+                Roll_power = Roll_power
             else:
-                self.Roll_power = calculate(setpointRoll, measurementRoll)
+                Roll_power = calculate(setpointRoll, measurementRoll)
             if (Pitch_power != None):
-                self.Pitch_power = Pitch_power
+                Pitch_power = Pitch_power
             else:
-                self.Pitch_power = calculate(setpointPitch, measurementPitch)
+                Pitch_power = calculate(setpointPitch, measurementPitch)
             if (Yaw_power != None):
-                self.Yaw_power = Yaw_power
+                Yaw_power = Yaw_power
             else:
-                self.Yaw_power = calculate(setpointYaw, measurementYaw)
+                Yaw_power = calculate(setpointYaw, measurementYaw)
+            # defining a decorator  
+            def controller_wrapper(func):  
+                
+                # inner1 is a Wrapper function in   
+                # which the argument is called  
+                def inner1():
+                    pass
+                # inner function can access the outer local  
+                # functions like in this case "func" 
+                
+                    # calling the actual function now  
+                    # inside the wrapper function.  
+                    func()
+                    
+                return inner1
+
+                
+            def Controller():
+                pass
+            Controller = controller_wrapper(Controller)

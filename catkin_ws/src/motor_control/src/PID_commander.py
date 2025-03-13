@@ -11,6 +11,9 @@ class PID_commander:
         roll_PID = PID_controller(5.0, 5.0, 5.0)
         yaw_PID = PID_controller(6.0, 6.0, 6.0)
         
+        #x, y, z, roll, pitch, yaw
+        self.PID_List = [x_PID, y_PID, z_PID, roll_PID, pitch_PID, yaw_PID]
+        
     def calculate (self,
                 setpointX : float, measurementX : float, velocityMeasureX : float,
                 setpointY : float, measurementY : float, velocityMeasureY : float,
@@ -23,23 +26,36 @@ class PID_commander:
                 thrustZ : float = None, VelocitySetZ : float = None,
                 thrustRoll : float = None, VelocitySetRoll : float = None,
                 thrustPitch : float = None, VelocitySetPitch : float = None,
-                thrustYaw : float = None, VelocitySetYaw : float = None
+                thrustYaw : float = None, VelocitySetYaw : float = None,
+                
+                xProperties : list, #set point, measurement, velocity measurement, thrust, velocity set
+                yProperties: list,
+                zProperties : list,
+                rollProprerties : list,
+                pitchProperties : list,
+                yawProperties : list
                 ):
         
         if (thrustX != None):
-            self.X_power = thrustX
+            self.thrustX = thrustX
+        elif (velocitySetX != None):
+            self.velocitySetX = VelocitySetX
         else:
-            self.X_power = self.x_PID.calculate(setpointX, measurementX)
+            self.velocitySetX = self.PID_List[0].calculate(setpointX, measurementX)
             
         if (thrustY != None):
-            self.Y_power = thrustY
+            self.thrustY = thrustY
+        elif (velocitySetY != None):
+            self.velocitySetY = VelocitySetY
         else:
-            self.Y_power = self.y_PID.calculate(setpointY, measurementY)
+            self.velocitySetY = self.y_PID.calculate(setpointY, measurementY)
             
-        if (Z_power != None):
-            self.Z_power = Z_power
+        if (thrustZ != None):
+            self.thrustZ = thrustZ
+        elif (velocitySetZ != None):
+            self.velocitySetZ = VelocitySetZ
         else:
-            self.Z_power = self.z_PID.calculate(setpointZ, measurementZ)
+            self.velocitySetZ = self.z_PID.calculate(setpointZ, measurementZ)
             
         if (Roll_power != None):
             self.Roll_power = Roll_power

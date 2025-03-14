@@ -1,16 +1,31 @@
-import PID_controller
-
+from catkin_ws.src.motor_control.src.controllers import PIDController, FeedforwardController
 class PID_commander:
     def __init__(self):            
         #x, y, z, roll, pitch, yaw
-        self.PID_List = [
-            PID_controller(1.0, 1.0, 1.0),        
-            PID_controller(2.0, 2.0, 2.0),
-            PID_controller(3.0, 3.0, 3.0),
-            PID_controller(4.0, 4.0, 4.0),
-            PID_controller(5.0, 5.0, 5.0),
-            PID_controller(6.0, 6.0, 6.0)
+        self.positional_pid_controllers = [
+            PIDController(1.0, 1.0, 1.0),        
+            PIDController(2.0, 2.0, 2.0),
+            PIDController(3.0, 3.0, 3.0),
+            PIDController(4.0, 4.0, 4.0),
+            PIDController(5.0, 5.0, 5.0),
+            PIDController(6.0, 6.0, 6.0)
             ]
+        self.velocity_pid_controllers = [
+            PIDController(1.0, 1.0, 1.0),        
+            PIDController(2.0, 2.0, 2.0),
+            PIDController(3.0, 3.0, 3.0),
+            PIDController(4.0, 4.0, 4.0),
+            PIDController(5.0, 5.0, 5.0),
+            PIDController(6.0, 6.0, 6.0)
+        ]
+        self.feedforward_controllers = [
+            FeedforwardController(0.0, 0.0),
+            FeedforwardController(0.0, 0.0),
+            FeedforwardController(0.0, 0.0),
+            FeedforwardController(0.0, 0.0),
+            FeedforwardController(0.0, 0.0),
+            FeedforwardController(0.0, 0.0),
+        ]
         
     '''setpointX : float, measurementX : float, velocityMeasureX : float,
                 setpointY : float, measurementY : float, velocityMeasureY : float,
@@ -33,6 +48,15 @@ class PID_commander:
                 thrustList : list = [None],
                 velocitySetList : list = [None]
                 ):
+        
+        """
+        Notes: 
+            -What is self.thrustList, self.velocitySetList, etc?
+            -Why u guys got so many self.variables in here? As far as i know, the only thing that should need to be accessed
+            via class variables is the controller lists
+            -I changed the name of a file to controllers.py, changed the way you import it, and added it as one of the lists. I also
+            added the velocity pid list.
+        """
         
         for i in range(6):
             if (self.thrustList[i] != None):

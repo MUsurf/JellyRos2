@@ -27,19 +27,6 @@ class PID_commander:
             FeedforwardController(0.0, 0.0),
         ]
         
-    '''setpointX : float, measurementX : float, velocityMeasureX : float,
-                setpointY : float, measurementY : float, velocityMeasureY : float,
-                setpointZ : float, measurementZ : float, velocityMeasureZ : float,
-                setpointRoll : float, measurementRoll : float, velocityMeasureRoll : float,
-                setpointPitch : float, measurementPitch : float, velocityMeasurePitch : float,
-                setpointYaw : float, measurementYaw : float, velocityMeasureYaw : float,
-                thrustX : float = None, VelocitySetX : float = None,
-                thrustY : float = None, VelocitySetY : float = None,
-                thrustZ : float = None, VelocitySetZ : float = None,
-                thrustRoll : float = None, VelocitySetRoll : float = None,
-                thrustPitch : float = None, VelocitySetPitch : float = None,
-                thrustYaw : float = None, VelocitySetYaw : float = None,'''
-        
     def calculate (self,
                 #x, y, z, roll, pitch, yaw
                 setPointList : list = [],

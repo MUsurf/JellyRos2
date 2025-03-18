@@ -78,3 +78,6 @@ class PID_commander:
                     if(abs(thrustList[i]) > self.MAX_THRUST) : thrustList[i] = (abs(thrustList[i]) / thrustList) * self.MAX_THRUST
         
         return thrustList
+    
+
+    

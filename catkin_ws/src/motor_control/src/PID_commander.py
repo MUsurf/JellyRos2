@@ -1,6 +1,7 @@
 from catkin_ws.src.motor_control.src.controllers import PIDController, FeedforwardController
 class PID_commander:
-    def __init__(self):            
+    def __init__(self):    
+        self.MAX_THRUST : float = 100.0
         #x, y, z, roll, pitch, yaw
         self.positional_pid_controllers = [
             PIDController(1.0, 1.0, 1.0),   #X      
@@ -63,6 +64,9 @@ class PID_commander:
                 feedForwardVelocityList[i] = self.feedforward_controllers[i].calculate(velocitySetPointList[i])
                 #Fill thrust list by summation of velocity PID and feed forward outputs
                 thrustList[i] = PIDvelocityList[i] + feedForwardVelocityList[i]
+                
+                #Bound the output thrust by self.MAX_THRUST
+                if(abs(thrustList[i]) > self.MAX_THRUST) : thrustList[i] = (abs(thrustList[i]) / thrustList) * self.MAX_THRUST
         
         return thrustList
     

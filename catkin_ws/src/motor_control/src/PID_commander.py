@@ -53,8 +53,12 @@ class PID_commander:
             else:
                 velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(setPointList[i], measurementList[i])
                 
+                PIDvelocityList = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
                 
+                feedForwardVelocityList = self.feedforward_controllers[i].calculate(velocitySetPointList)
                 
+                for j in range(5):
+                    thrustList[j] = PIDvelocityList[j] + feedForwardVelocityList[i]
         
         '''if (Yaw_power != None):
             self.Yaw_power = Yaw_power
@@ -62,3 +66,4 @@ class PID_commander:
             self.Yaw_power = self.yaw_PID.calculate(setpointYaw, measurementYaw)'''
         
         return thrustList
+    

@@ -45,22 +45,24 @@ class PID_commander:
             added the velocity pid list.
         """
         
+        PIDvelocityList : list = []
+        feedForwardVelocityList : list = []
+        
         for i in range(6):
-            #Check if thrust powers are given
-            if (thrustList[i] != None):
-                return thrustList
             #Check if velocity set points are not given
-            elif (velocitySetPointList[i] == None):
+            if (velocitySetPointList[i] == None):
                 #Call positional PIDs to create velocity set points if they are not given
                 velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(positionSetPointList[i], poisitionMeasurementList[i])
-            #Call velocity PIDs to create end velocity list
-            PIDvelocityList = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
-            #Call feed forward PIDs
-            feedForwardVelocityList = self.feedforward_controllers[i].calculate(velocitySetPointList)
-        
-            for j in range(6):
+            #Check if thrust was given
+            if (thrustList[i] != None):
+                pass
+            else:
+                #Call velocity PIDs to create end velocity list
+                PIDvelocityList[i] = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
+                #Call feed forward PIDs
+                feedForwardVelocityList[i] = self.feedforward_controllers[i].calculate(velocitySetPointList[i])
                 #Fill thrust list by summation of velocity PID and feed forward outputs
-                thrustList[j] = PIDvelocityList[j] + feedForwardVelocityList[i]
+                thrustList[i] = PIDvelocityList[i] + feedForwardVelocityList[i]
         
         return thrustList
     

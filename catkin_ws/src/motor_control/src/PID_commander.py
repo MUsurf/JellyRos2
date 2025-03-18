@@ -29,8 +29,8 @@ class PID_commander:
         
     def calculate (self,
                 #x, y, z, roll, pitch, yaw
-                setPointList : list = [],
-                measurementList : list = [],
+                positionSetPointList : list = [],
+                poisitionMeasurementList : list = [],
                 velocityMeasurementList : list = [],
                 thrustList : list = [None],
                 velocitySetPointList : list = [None]
@@ -47,18 +47,17 @@ class PID_commander:
         
         for i in range(6):
             if (thrustList[i] != None):
-                thrustList[i]= thrustList[i]
-            elif (velocitySetPointList[i] != None):
-                velocitySetPointList[i]= velocitySetPointList[i]
-            else:
-                velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(setPointList[i], measurementList[i])
+                return thrustList
+            
+            elif (velocitySetPointList[i] == None):
+                velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(positionSetPointList[i], poisitionMeasurementList[i])
                 
-                PIDvelocityList = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
-                
-                feedForwardVelocityList = self.feedforward_controllers[i].calculate(velocitySetPointList)
-                
-                for j in range(5):
-                    thrustList[j] = PIDvelocityList[j] + feedForwardVelocityList[i]
+            PIDvelocityList = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
+            
+            feedForwardVelocityList = self.feedforward_controllers[i].calculate(velocitySetPointList)
+        
+            for j in range(6):
+                thrustList[j] = PIDvelocityList[j] + feedForwardVelocityList[i]
         
         '''if (Yaw_power != None):
             self.Yaw_power = Yaw_power

@@ -33,10 +33,9 @@ class PIDController:
         return output #return power
     
 class FeedforwardController:
-    def __init__(self, kV, kA):
+    def __init__(self, kV):
         """Idk if it is just kV and kA yet, these are filler constants"""
         self.kV = kV
-        self.kA = kA
         
     def calculate(self, setpoint):
         """Another filler, idk if it needs more than this or not yet"""

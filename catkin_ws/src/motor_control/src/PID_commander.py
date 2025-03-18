@@ -20,12 +20,12 @@ class PID_commander:
             PIDController(6.0, 6.0, 6.0)
         ]
         self.feedforward_controllers = [
-            FeedforwardController(0.0, 0.0),
-            FeedforwardController(0.0, 0.0),
-            FeedforwardController(0.0, 0.0),
-            FeedforwardController(0.0, 0.0),
-            FeedforwardController(0.0, 0.0),
-            FeedforwardController(0.0, 0.0),
+            FeedforwardController(0.0),
+            FeedforwardController(0.0),
+            FeedforwardController(0.0),
+            FeedforwardController(0.0),
+            FeedforwardController(0.0),
+            FeedforwardController(0.0),
         ]
         
     def calculate (self,
@@ -50,23 +50,32 @@ class PID_commander:
         feedForwardVelocityList : list = []
         
         for i in range(6):
-            #Check if velocity set points are not given
-            if (velocitySetPointList[i] == None):
-                #Call positional PIDs to create velocity set points if they are not given
-                velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(positionSetPointList[i], poisitionMeasurementList[i])
-            #Check if thrust was given
-            if (thrustList[i] != None):
-                pass
-            else:
-                #Call velocity PIDs to create end velocity list
-                PIDvelocityList[i] = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
-                #Call feed forward PIDs
-                feedForwardVelocityList[i] = self.feedforward_controllers[i].calculate(velocitySetPointList[i])
-                #Fill thrust list by summation of velocity PID and feed forward outputs
-                thrustList[i] = PIDvelocityList[i] + feedForwardVelocityList[i]
-                
-                #Bound the output thrust by self.MAX_THRUST
-                if(abs(thrustList[i]) > self.MAX_THRUST) : thrustList[i] = (abs(thrustList[i]) / thrustList) * self.MAX_THRUST
+            if(
+                #Case 1
+                (poisitionMeasurementList[i] != None and
+                 positionSetPointList[i] != None and
+                 velocityMeasurementList[i]!= None) or 
+                (velocitySetPointList[i] != None and
+                 velocityMeasurementList[i] != None) or
+                (thrustList[i] != None)
+            ):
+                #Check if velocity set points are not given
+                if (velocitySetPointList[i] == None):
+                    #Call positional PIDs to create velocity set points if they are not given
+                    velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(positionSetPointList[i], poisitionMeasurementList[i])
+                #Check if thrust was given
+                if (thrustList[i] != None):
+                    pass
+                else:
+                    #Call velocity PIDs to create end velocity list
+                    PIDvelocityList[i] = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
+                    #Call feed forward PIDs
+                    feedForwardVelocityList[i] = self.feedforward_controllers[i].calculate(velocitySetPointList[i])
+                    #Fill thrust list by summation of velocity PID and feed forward outputs
+                    thrustList[i] = PIDvelocityList[i] + feedForwardVelocityList[i]
+                    
+                    #Bound the output thrust by self.MAX_THRUST
+                    if(abs(thrustList[i]) > self.MAX_THRUST) : thrustList[i] = (abs(thrustList[i]) / thrustList) * self.MAX_THRUST
         
         return thrustList
     

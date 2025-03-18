@@ -46,6 +46,9 @@ class MotorCommand():
         self.motor_thread.start()
     
     def set_motor_pwm(self, powers : list):
+        """Set the PWM signal for the motors. inputs are from -100 to 100, which are basically percentages of the total
+        This converts the input to a format the motor actaally wants.
+        """
         #0 (-100) to 65535 (100)
         # #pwm_value is a 16 bit int (0 is -100, max is 100)
         
@@ -64,6 +67,7 @@ class MotorCommand():
                     self.current_power[i] += (distance / abs(distance)) * self.step_value
     
     def motor_loop(self):
+        """Refreshes the motor's PWM signal at a set frequency. Constantly."""
         while True:
             start_time = time.time()
             if(self.motor_flag):

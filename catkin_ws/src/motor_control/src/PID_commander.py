@@ -3,12 +3,12 @@ class PID_commander:
     def __init__(self):            
         #x, y, z, roll, pitch, yaw
         self.positional_pid_controllers = [
-            PIDController(1.0, 1.0, 1.0),        
-            PIDController(2.0, 2.0, 2.0),
-            PIDController(3.0, 3.0, 3.0),
-            PIDController(4.0, 4.0, 4.0),
-            PIDController(5.0, 5.0, 5.0),
-            PIDController(6.0, 6.0, 6.0)
+            PIDController(1.0, 1.0, 1.0),   #X      
+            PIDController(2.0, 2.0, 2.0),   #Y
+            PIDController(3.0, 3.0, 3.0),   #Z
+            PIDController(4.0, 4.0, 4.0),   #ROLL
+            PIDController(5.0, 5.0, 5.0),   #PITCH
+            PIDController(6.0, 6.0, 6.0)    #YAW
             ]
         self.velocity_pid_controllers = [
             PIDController(1.0, 1.0, 1.0),        
@@ -31,9 +31,9 @@ class PID_commander:
                 #x, y, z, roll, pitch, yaw
                 setPointList : list = [],
                 measurementList : list = [],
-                velocityMeasurementList : list = [None],
+                velocityMeasurementList : list = [],
                 thrustList : list = [None],
-                velocitySetList : list = [None]
+                velocitySetPointList : list = [None]
                 ):
         
         """
@@ -46,18 +46,19 @@ class PID_commander:
         """
         
         for i in range(6):
-            if (self.thrustList[i] != None):
-                self.thrustList[i]= thrustList[i]
-            elif (self.velocitySetList[i] != None):
-                self.velocitySetList[i]= velocitySetList[i]
+            if (thrustList[i] != None):
+                thrustList[i]= thrustList[i]
+            elif (velocitySetPointList[i] != None):
+                velocitySetPointList[i]= velocitySetPointList[i]
             else:
-                thrustList[i] = self.PID_List[i].calculate(setPointList[i], measurementList[i])
+                velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(setPointList[i], measurementList[i])
+                
+                
+                
         
         '''if (Yaw_power != None):
             self.Yaw_power = Yaw_power
         else:
             self.Yaw_power = self.yaw_PID.calculate(setpointYaw, measurementYaw)'''
-    
-        powers = [self.X_power, self.Y_power, self.Z_power, self.Roll_power, self.Pitch_power, self.Yaw_power]
         
-        return powers
+        return thrustList

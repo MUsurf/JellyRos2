@@ -29,11 +29,11 @@ class PID_commander:
         
     def calculate (self,
                 #x, y, z, roll, pitch, yaw
-                positionSetPointList : list = [],
-                poisitionMeasurementList : list = [],
-                velocityMeasurementList : list = [],
-                thrustList : list = [None],
-                velocitySetPointList : list = [None]
+                positionSetPointList : list = [], #Input desired positions
+                poisitionMeasurementList : list = [], #Input current positional measurements
+                velocityMeasurementList : list = [], #Input current velocity measurements
+                thrustList : list = [None], #Final, returned list of thrust power output
+                velocitySetPointList : list = [None] #Velocity desired measurement. Input or filled by positional PIDs
                 ):
         
         """
@@ -46,23 +46,21 @@ class PID_commander:
         """
         
         for i in range(6):
+            #Check if thrust powers are given
             if (thrustList[i] != None):
                 return thrustList
-            
+            #Check if velocity set points are not given
             elif (velocitySetPointList[i] == None):
+                #Call positional PIDs to create velocity set points if they are not given
                 velocitySetPointList[i] = self.positional_pid_controllers[i].calculate(positionSetPointList[i], poisitionMeasurementList[i])
-                
+            #Call velocity PIDs to create end velocity list
             PIDvelocityList = self.velocity_pid_controllers[i].calculate(velocitySetPointList[i], velocityMeasurementList[i])
-            
+            #Call feed forward PIDs
             feedForwardVelocityList = self.feedforward_controllers[i].calculate(velocitySetPointList)
         
             for j in range(6):
+                #Fill thrust list by summation of velocity PID and feed forward outputs
                 thrustList[j] = PIDvelocityList[j] + feedForwardVelocityList[i]
-        
-        '''if (Yaw_power != None):
-            self.Yaw_power = Yaw_power
-        else:
-            self.Yaw_power = self.yaw_PID.calculate(setpointYaw, measurementYaw)'''
         
         return thrustList
     

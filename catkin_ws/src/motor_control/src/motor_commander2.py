@@ -19,20 +19,35 @@ i2c = busio.I2C(SCL, SDA)
 # END SETUP
 
 class MotorCommand():
-    """Put class documentation here"""
+    """Put class documentation here
+    """
     def __init__(self,
         local_channels : List[int],
         pca_address : int = 0x40) -> None:
-        """Put documentation here"""
+        """_summary_
+
+        _extended_summary_
+
+        Parameters
+        ----------
+        local_channels : List[int]
+            List of channels to be using from i2c splitter (?)
+        pca_address : int
+            Address of the pca (?)
+        """
         
         #PCA definition
         self.pca = PCA9685.PCA9685(i2c, address=pca_address) #0x40 is the I2C address of the PCA
         self.pca.frequency = 280 # Hz
         
+        # info Number of motors being managed
         self.num_motors = len(local_channels)
         
+        # info Current power of motors
         self.current_power = [0 for i in range(8)]
+        # info Desired power of motors
         self.goal_power = [0 for i in range(8)]
+        # info Step value to alter power by
         self.step_value = 1
         
         self.motors: List[PCA9685.PWMChannel] = [

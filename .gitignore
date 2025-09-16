@@ -20,3 +20,7 @@ build
 
 # Ignore documentation files to be built locally
 Generated
+
+
+# Ignore the IGNORE tag
+*IGNORE*
